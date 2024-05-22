@@ -6,7 +6,8 @@ require_once 'classes/Message.php';
 
 $_message = new message();
 $ip = $_SERVER['REMOTE_ADDR'];
-$lasteMessage = $_message->getMessage($ip);
+$lastMessage = $_message->getMessage($ip);
+$lastMessages = $_message->getMessages($ip);
 
 if(isset($_POST['save_btn']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
     
@@ -37,12 +38,37 @@ if(isset($_POST['save_btn']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
                     <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
                         <div class="form-group">
                             <label for="text">Text:</label>
-                            <textarea placeholder="type something..." name="message" id="text" cols="30" rows="10" class="form-control"><?= $lasteMessage ?></textarea>
+                            <textarea placeholder="type something..." name="message" id="text" cols="30" rows="10" class="form-control"><?= $lastMessage ?></textarea>
                         </div>
                         <div class="form-group mt-3">
                             <input name="save_btn" type="submit" value="Save" class="form-control btn btn-dark">
                         </div>
                     </form>
+            <hr>
+            <h5>last 10 Messages.</h5>
+            <small>
+                IP: 1.2.3.4
+            </small>
+            <table class="table table-responsive table-stripped table-info table-bordered">
+                <thead>
+                    <tr>
+                        <th>Browser</th>
+                        <th>Message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    foreach($lastMessages as $message):
+                    ?>
+                    <tr>
+                        <td><?php echo $message['user_agent']; ?></td>
+                        <td><?php echo $message['message']; ?></td>
+                    </tr>
+                    <?php
+                    endforeach;
+                    ?>
+                </tbody>
+            </table>
                 </main>
             </div>
 

@@ -48,4 +48,12 @@ class Message {
             return null;
         }
     }
+    public function getMessageS($ip) {
+        $result = $this->connection->getLast10Messages($ip);
+        if(count($result) > 0) {
+            return $result;
+        }else{
+            return null;
+        }
+    }
 }
