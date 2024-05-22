@@ -2,10 +2,10 @@
 
 class Database {
 
-    private $host = 'localhost';
+    private $host = 'localhost:3307';
     private $username = 'root';
     private $password = '';
-    private $database = 'simple-saver';
+    private $database = 'simple_savaer_dbs';
     private $connection;
 
     // Constructor to create database connection
@@ -70,4 +70,10 @@ class Database {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getLastMessage($ip) {
+        $sql = "SELECT messages.* FROM messages JOIN users ON users.id = messages.user_id WHERE users.ip = '$ip' ORDER BY id DESC LIMIT 1";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
