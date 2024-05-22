@@ -2,10 +2,10 @@
 
 class Database {
 
-    private $host = 'localhost:3307';
+    private $host = 'localhost';
     private $username = 'root';
     private $password = '';
-    private $database = 'simple_savaer_dbs';
+    private $database = 'simple-saver';
     private $connection;
 
     // Constructor to create database connection
