@@ -1,4 +1,7 @@
 <?php
+
+use src\Semej\Semej;
+
 require_once 'classes/Message.php';
 
 $_message = new message();
@@ -30,6 +33,7 @@ if(isset($_POST['save_btn']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
                     <h1 class="text-center">Simple Saver</h1>
                 </header>
                 <main>
+                    <?php Semej::show(); ?>
                     <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
                         <div class="form-group">
                             <label for="text">Text:</label>

@@ -1,6 +1,9 @@
 <?php
 
 require_once 'Databeses.php';
+require_once 'src/Semej.php';
+
+use src\Semej\Semej;
 
 class Message {
 
@@ -24,6 +27,8 @@ class Message {
             'user_agent' => $user_agent
         ];
         $this->connection->insert('messages', $message_data);
+        Semej::set('success', 'OK', 'Message Saved');
+        header("Location:" . $_SERVER['PHP_SELF']);
     }
 
     public function checkIP($ip) {
