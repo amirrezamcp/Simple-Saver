@@ -34,4 +34,13 @@ class Message {
             return null;
         }
     }
+
+    public function getMessage($ip) {
+        $result = $this->connection->getLastMessage($ip);
+        if(count($result) > 0) {
+            return $result[0]['message'];
+        }else{
+            return null;
+        }
+    }
 }
