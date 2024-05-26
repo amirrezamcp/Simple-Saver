@@ -1,22 +1,23 @@
 <?php
 
 use src\Semej\Semej;
+use src\Sanitizer\Sanitizer;
 
 require_once 'classes/Message.php';
+require_once 'classes/Helper.php';
+require_once 'src/Sanitizer.php';
 
-$_message = new message();
-$ip = $_SERVER['REMOTE_ADDR'];
-$lastMessage = $_message->getMessage($ip);
+$_message = new Message();
+$ip = Sanitizer::sanitizeInput($_SERVER['REMOTE_ADDR']);
+$lastMessage =  $_message->getMessage($ip);
 $lastMessages = $_message->getMessages($ip);
 
 if(isset($_POST['save_btn']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // get form and request data
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $user_agent = $_SERVER['HTTP_USER_AGENT'];
-    $message = $_POST['message'];
+    $user_agent = Sanitizer::sanitizeInput($_SERVER['HTTP_USER_AGENT']);
+    $message = Sanitizer::sanitizeInput($_POST['message']); 
     $_message->add($ip, $user_agent, $message);
-    header("Location:" . $_SERVER['PHP_SELF']);
 }
 ?>
 
@@ -34,20 +35,20 @@ if(isset($_POST['save_btn']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
                     <h1 class="text-center">Simple Saver</h1>
                 </header>
                 <main>
-                    <?php Semej::show(); ?>
-                    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
-                        <div class="form-group">
-                            <label for="text">Text:</label>
-                            <textarea placeholder="type something..." name="message" id="text" cols="30" rows="10" class="form-control"><?= $lastMessage ?></textarea>
-                        </div>
-                        <div class="form-group mt-3">
-                            <input name="save_btn" type="submit" value="Save" class="form-control btn btn-dark">
-                        </div>
-                    </form>
+            <?php Semej::show(); ?>
+            <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
+                <div class="form-group">
+                    <label for="text">Text:</label>
+                    <textarea placeholder="type something..." name="message" id="text" cols="30" rows="10" class="form-control"><?= $lastMessage; ?></textarea>
+                </div>
+                <div class="form-group mt-3">
+                    <input name="save_btn" type="submit" value="Save" class="form-control btn btn-dark">
+                </div>
+            </form>
             <hr>
             <h5>last 10 Messages.</h5>
             <small>
-                IP: 1.2.3.4
+                IP: <?= $ip; ?>
             </small>
             <table class="table table-responsive table-stripped table-info table-bordered">
                 <thead>
@@ -61,8 +62,8 @@ if(isset($_POST['save_btn']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
                     foreach($lastMessages as $message):
                     ?>
                     <tr>
-                        <td><?php echo $message['user_agent']; ?></td>
-                        <td><?php echo $message['message']; ?></td>
+                        <td><?= Helper::getBrowser($message['user_agent']); ?></td>
+                        <td><?= $message['message']; ?></td>
                     </tr>
                     <?php
                     endforeach;
